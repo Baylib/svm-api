@@ -52,8 +52,9 @@ jobs:
 
     - name: Package Helm chart
       run: |
-        helm package ./$HELM_CHART_NAME --version ${{ steps.generate-version.outputs.full_version }} --app-version ${{ steps.generate-version.outputs.full_version }}
+        helm package ./${{ env.HELM_CHART_NAME }} --version ${{ steps.generate-version.outputs.full_version }} --app-version ${{ steps.generate-version.outputs.full_version }}
 
     - name: Push Helm chart to Docker Hub
       run: |
-        helm push $HELM_CHART_NAME-${{ steps.generate-version.outputs.full_version }}.tgz oci://docker.io/${{ secrets.DOCKER_USERNAME }}/$HELM_CHART_NAME
+        helm push ${{ env.HELM_CHART_NAME }}-${{ steps.generate-version.outputs.full_version }}.tgz oci://docker.io/${{ secrets.DOCKER_USERNAME }}/${{ env.HELM_CHART_NAME }}
+
