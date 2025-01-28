@@ -52,7 +52,7 @@ jobs:
 
     - name: Log in to Docker Hub with Helm
       run: |
-        echo ${{ secrets.DOCKER_TOKEN }} | helm registry login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin docker.io
+        echo ${{ secrets.DOCKER_TOKEN }} | helm registry login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin registry-1.docker.io
 
     - name: Package Helm chart
       run: |
@@ -60,5 +60,5 @@ jobs:
 
     - name: Push Helm chart to Docker Hub
       run: |
-        helm push ${{ env.HELM_CHART_NAME }}-${{ steps.generate-version.outputs.full_version }}.tgz oci://docker.io/${{ secrets.DOCKER_USERNAME }}/${{ env.HELM_CHART_NAME }}
+        helm push ${{ env.HELM_CHART_NAME }}-${{ steps.generate-version.outputs.full_version }}.tgz oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME }}
 
