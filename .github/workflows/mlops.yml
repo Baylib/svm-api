@@ -50,6 +50,10 @@ jobs:
           ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
           ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.generate-version.outputs.full_version }}
 
+    - name: Log in to Docker Hub with Helm
+      run: |
+        echo ${{ secrets.DOCKER_TOKEN }} | helm registry login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin docker.io
+
     - name: Package Helm chart
       run: |
         helm package ./${{ env.HELM_CHART_NAME }} --version ${{ steps.generate-version.outputs.full_version }} --app-version ${{ steps.generate-version.outputs.full_version }}
