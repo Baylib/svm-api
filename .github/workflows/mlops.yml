@@ -1,0 +1,57 @@
+name: Mlops 
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to main branch
+  pull_request:
+    branches:
+      - main  # Trigger on pull request to main branch
+
+env:
+  HELM_CHART_NAME: svm-api-helm 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Extract Chart Version
+      id: chart-version
+      run: |
+        CHART_VERSION=$(awk '/^version:/ {print $2}' charts/$HELM_CHART_NAME/Chart.yaml)
+        echo "Extracted Chart Version: $CHART_VERSION"
+        echo "::set-output name=chart_version::$CHART_VERSION"
+
+    - name: Generate Version with Commit SHA
+      id: generate-version
+      run: |
+        FULL_VERSION="${{ steps.chart-version.outputs.chart_version }}-$GITHUB_SHA"
+        echo "Generated Version: $FULL_VERSION"
+        echo "::set-output name=full_version::$FULL_VERSION"
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest, ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:${{ steps.generate-version.outputs.full_version }}
+
+
+    - name: Package Helm chart
+      run: |
+        helm package ./$HELM_CHART_NAME --version ${{ steps.generate-version.outputs.full_version }} --app-version ${{ steps.generate-version.outputs.full_version }}
+
+    - name: Push Helm chart to Docker Hub
+      run: |
+        helm push $HELM_CHART_NAME-${{ steps.generate-version.outputs.full_version }}.tgz oci://docker.io/${{ secrets.DOCKER_USERNAME }}/$HELM_CHART_NAME
