@@ -71,7 +71,7 @@ ingress:
           pathType: Prefix
           backend:
             service:
-              name: {{ include "svm-api-helm.fullname" . }}
+              name: svm-api-helm
               port:
                 number: 8080
   tls: []
