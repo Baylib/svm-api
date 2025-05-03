@@ -19,7 +19,7 @@ def process():
         response.status = 400
         return {"error": "No data provided"}
 
-    result = str(svm.predict(input_data))
+    result = str(clf.predict(input_data))
 
     response.content_type = 'application/json'
 
