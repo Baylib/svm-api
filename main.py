@@ -29,6 +29,6 @@ def process():
 # Run the Bottle server
 if __name__ == '__main__':
     version = os.environ['MODEL_VERSION']
-    with open(f"mnt/models/models/{version}/model", "rb") as f:
+    with open(f"/mnt/models/models/{version}/model", "rb") as f:
         clf: svm.SVC = pickle.load(f)
     run(app, host='0.0.0.0', port=8080)
