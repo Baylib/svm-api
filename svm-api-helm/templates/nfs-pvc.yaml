@@ -8,5 +8,5 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: nfs-pv-mthmlops
+  volumeName: nfs-pv-svm-api
   storageClassName: ""
