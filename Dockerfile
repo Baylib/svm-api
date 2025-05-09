@@ -15,4 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8080
 
 # Specify the command to run the Python script
-CMD ["python", "main.py"]
+ENTRYPOINT ["python", "/app/main.py"]
