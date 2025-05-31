@@ -1,8 +1,8 @@
 # svm api
+This repository is a demo SVM use as a demo model in our MLOps GitOps workflow.
+It follows the contribution guidelines in our GitOps master-thesis-nlops project.
 
-[https://pythonprogramming.net/predictions-svm-machine-learning-tutorial/?completed=/svm-optimization-python-2-machine-learning-tutorial/]
-
-## run
+## run the image locally
 
 ```bash
 source ./venv/bin/activate
@@ -11,7 +11,7 @@ pip freeze requirements.txt
 
 ```
 
-## call
+## call the api
 
 ```bash
 curl -X POST http://localhost:8080/process \

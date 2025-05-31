@@ -9,10 +9,11 @@ app = Bottle()
 clf = None  # Global model variable for serving
 
 # API routes for serving mode
-@app.route('/status', method='GET')
+@app.route('/', method='GET')
 def status():
     response.content_type = 'application/json'
-    return "ok"
+    model_version = os.environ.get("MODEL_VERSION")
+    return {"version": model_version}
 
 @app.route('/process', method='POST')
 def process():
