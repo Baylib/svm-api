@@ -15,6 +15,11 @@ def status():
     model_version = os.environ.get("MODEL_VERSION")
     return {"version": model_version}
 
+@app.route('/status', method='GET')
+def status():
+    response.content_type = 'application/json'
+    return {"status": "ok"}
+
 @app.route('/process', method='POST')
 def process():
     input_data = request.json.get("data", [])
